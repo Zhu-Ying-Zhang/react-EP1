@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/Zhu-Ying-Zhang/react-EP1/issues"
   },
-  "homepage": "https://github.com/Zhu-Ying-Zhang/react-EP1#readme"
+  "homepage": "https://github.com/Zhu-Ying-Zhang/react-EP1#readme",
+  "dependencies": {
+    "eslint": "^5.12.1"
+  },
+  "devDependencies": {
+    "eslint-plugin-react": "^7.12.4"
+  }
 }
