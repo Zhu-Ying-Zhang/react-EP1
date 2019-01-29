@@ -1,0 +1,98 @@
+2019/01/29 紀錄
+EP1順序
+1. 先建立git init
+
+2. 在進行npm init npm全名nodejs package management 可以用來控管專案
+會產出package.json file
+
+3. 整合ESLint
+cmd : npm install eslint --save-dev
+--知識點：
+（1）如果再安裝package時 加入--save-dev 表示在開發時使用也不會去影響到global配置
+
+ESLint介紹：
+EsLint是監控程式碼的工具，可以查看自己的程式是否符合規則（也可以使用其他公司的json來規範自己）
+--知識點：
+（1）package-lock.json為了鎖定套件的版本
+
+ESLint初始設定config file
+cmd : .\node_modules\.bin\eslint --init
+回答問題後會產生一個隱藏檔案
+cmd : ls -a 可查看隱藏檔 --> .eslintrc.json
+(之後可以對檔案進行修改)
+Q : How to montitor you js code
+A : ./node_modules/.bin/eslint yourfile.js
+發現問題=>在新版的EsLint需要多安裝一個套件
+cmd : npm i eslint-plugin-react@latest --save-dev
+
+-------之後會放在webpack裡與webpack整合 請期待
+
+ESLint可以管理滿多東西的
+.eslintrc.json內會有一個"extends":"eslint:recommended"
+可在網站上看到有打勾的為預設會檢查的項目
+
+建立.gitignore file 可以過濾掉不要的檔案或者資料夾避免東西都直接上git很麻煩
+node_modules不需要 因為可以利用package.json來建立
+＊.log 也不需要
+DS_Store mac的暫存檔
+＊config.json設定檔 設定環境變數
+！default.config.json 可以告訴初次設定的人如何設定 加！代表留著
+dist/  編譯完的結果也不需進入版本控制
+img/ 版權所以也不會進入
+
+--影片41:28
+4. 整合Babel
+Babel介紹
+是一個編譯js的東西，寫了ES6的語言但想支援舊的瀏覽器就可以使用到babel預先處理後輸出
+在package上的script加入 "start" : "babel-node index.js" 可以直接吃ES6的語法
+cmd : npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/node
+
+舊寫法
+{
+    "presets" : ["env", "es2015", "react"]
+}
+env讓babel在哪個環境跑
+es2015是為了向下支援（先不管）
+react是為了預先處理react的東西（先不管）
+
+新寫法
+{
+    "presets" : ["@babel/node"]
+}
+透過babel先處理js內容
+通常建議裝es2015套件
+
+5.整合webpack
+webpack介紹：
+用途在於編譯一些CSS js html將包裝自動化，方便於發布
+cmd : npm install --save-dev webpack
+cmd : npm install --save-dev webpack-cli
+須注意專案開發久後會變得很複雜
+如果在webpack指令後加上 --progress 可以將處理過程全部print出來
+通常會在這裡設定要打包的環境變數會將名稱設定為NODE_ENV 且會在process.env的這個物件裡
+ex: "build" : "NODE_ENV=development webpack --progress" <== unix
+    "build" : "set NODE_ENV=development && webpack --progress" <== windows
+
+----注意點
+windows以及unix設定參數不一樣
+unix : NODE_ENV=prodution node index.js
+windows : set NODE_ENV=prodution && node index.js
+unix 可以使用分號（：）執行多個指令
+
+webpack執行命令需要安裝webpack-cli
+cmd : npm install webpack-cli --save-dev
+再來可以使用package.json內的設定 npm run wondowsbuild來輸出
+會自動產生dist資料夾output file則會在裡面
+
+如果直接先執行index.js剛設定的console.log內的環境變數都是不存在的
+但如果將index.html內的js變換成bundle.js則會出現
+因為webpack執行完後會確保你在瀏覽器執行與在node執行產生相同的效果
+新版webpackc會有mode的設定
+因為不想每次都要設定環境變數所以可以使用判斷來告知webpack是要輸出正式還是開發環境的包
+--知識點
+如果mode是使用development出來的bundle.js會是比較看得懂的樣子
+
+(將index.js index.html獨立於src folder內)
+目前只是做出靜態網頁，打開html讓js能夠吃到
+
+下一章節 express server & hot reload
