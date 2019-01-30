@@ -4,9 +4,10 @@
   "description": "https://www.youtube.com/watch?v=ALc5W7biMP4&t=875s",
   "main": "index.js",
   "scripts": {
-    "unixbuild": "NODE_ENV=development webpack --progress",
+    "unixbuild": "rm -rf dist NODE_ENV=development webpack --progress",
     "unixstart": "NODE_ENV=development babel-node index.js",
-    "windowsbuild": "set NODE_ENV=development && webpack --progress",
+    "devserver": "nodemon --exec babel-node src/server --inspect src/server",
+    "windowsbuild": "rm -rf dist && set NODE_ENV=development && webpack --progress",
     "windowsstart": "set NODE_ENV=development && babel-node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -27,6 +28,7 @@
   "homepage": "https://github.com/Zhu-Ying-Zhang/react-EP1#readme",
   "dependencies": {
     "eslint": "^5.12.1",
+    "express": "^4.16.4",
     "webpack-cli": "^3.2.1"
   },
   "devDependencies": {
@@ -35,6 +37,7 @@
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "eslint-plugin-react": "^7.12.4",
+    "nodemon": "^1.18.9",
     "webpack": "^4.29.0"
   }
 }
