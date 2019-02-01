@@ -1,25 +1,44 @@
 import Express from "express";
+import EnvConfig from '../../config.json';
 //const Express = require('express');
 
-const PORT = process.env.PORT || "3000";
+const nodeEnv = process.env.NODE_ENV || EnvConfig.NODE_ENV || 'production';
+const isProd = 'production' === nodeEnv;
+
+const PORT = process.env.PORT || EnvConfig.PORT || "3000";
 //創造實體
 const server = new Express();
 
+//開發階段才載入
+if(!isProd){
+    const hotReloader = require('./hotReload.js');
+    server.use(hotReloader.webpackDevMiddleware);
+    server.use(hotReloader.webpackHotMiddleware);
+}
+//也可以使用以下寫法與上面的結果一樣
+//if(!isProd){
+//   const {webpackDevMiddleware, webpackHotMiddleware} = require('./hotReload.js');
+//   server.use(webpackDevMiddle);
+//   server.use(webpackHotMiddle);
+//}
+
 const renderHtml = (args) => `
-return '<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Page Title</title>
     <body>
       i will be back. ${args}
     </body>
+    
     <script src="/js/bundle.js"></script>
   </head>
   <body></body>
 </html>
 `;
 
-server.use("/js/", Express.static(`${__dirname}/../../dist/client/`));
+server.use("/css/", Express.static(`${__dirname}/../../src/client/css/`))
+server.use("/js/", Express.static(`${__dirname}/../../dist/client/js/`));
 //如果什麼都沒加 只有一個slash代表是根目錄
 server.get("/", (request, respons) => {
   respons.send(renderHtml());
