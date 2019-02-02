@@ -1,0 +1,40 @@
+EP1已經有加入eslint但都沒有對程式進行
+可以寫完code存完檔hot reload前會同時檢查eslint
+cmd : npm install --save-dev eslint-loader
+安裝完後須到webpack.config.js內設定
+再module的設定檢查是由後往前檢查
+以現在設定的esline為例
+會先檢查eslint-loader再檢查babel-loader
+原因很簡單因為babel會轉譯到時候格式會跑掉
+需要對我們未轉譯前檢查就好
+還有一點重要的
+我們檢查只要針對我們更改過的程式檢查就好不需要對其他的檔案也去檢查
+所以會使用到exclude來排除
+
+需再多安裝babel-loader
+cmd : npm install --save-dev babel-loader
+在webpack.config.babel.js內加上enforce: "pre"代表在所有loader之前都會去處理
+
+處理nodemo問題 (目前狀況為修改client也會去監控-->不是我們要的)
+結論應該是要用watch而不是inspect
+
+1. 學習react 開始!!!
+下載套件
+cmd : npm install --save react react-dom
+一個處理react code 一個處理render
+通常會將react的檔案用jsx來做
+但要注意因為我們的webpack.config.babel.js是設定js要跑babel的loader
+所以要將jsx加入才不會報錯
+這時候會出錯 因為我們在eslint設定沒加上react/recommended
+有正統寫法-->常常出現在需要使用componentDidMount()-->render之後進行的動作
+詳情請看livecycle
+
+react 有props的問題
+如果使用PropTypes可以在開發或執行階段檢查型別、命名、內容是否正確
+cmd : npm install --save prop-types
+
+--知識點
+有套件可以幫助我們在更新react時不會網頁整個reload
+而是只更新我們修改過的component
+cmd : npm install --save-dev react-hot-loader
+只要最外層有react-hot-reload就好 其他的component也會有同樣效果
