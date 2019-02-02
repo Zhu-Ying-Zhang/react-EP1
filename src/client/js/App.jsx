@@ -1,10 +1,10 @@
 //App.jsx
 import React from "react";
 import PropTypes from "prop-types";
-
+import { hot } from "react-hot-loader";
 //特殊寫法
-const App = (props) => {
-  const {content} = props;
+const App = props => {
+  const { content } = props;
   return <div className="App">This is App!{content}</div>;
 };
 //正統寫法
@@ -15,7 +15,7 @@ const App = (props) => {
 //}
 
 App.propTypes = {
-  content: PropTypes.string, 
+  content: PropTypes.string
 };
 
-export default App;
+export default hot(module)(App);
