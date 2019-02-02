@@ -54,12 +54,12 @@ export default {
       //如果加了這區塊就會確保在所有loader之前都會去處理
       {
         enforce: "pre",
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: "/node_modules/",
         use: [{ loader: "eslint-loader" }]
       },
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: "/node_modules/",
         use: [{ loader: "babel-loader" }]
       }

@@ -6,7 +6,7 @@
   "scripts": {
     "unixbuild": "rm -rf dist NODE_ENV=development webpack --progress",
     "unixstart": "NODE_ENV=development babel-node src/server",
-    "devserver": "nodemon --exec babel-node src/server --inspect src/server",
+    "devserver": "nodemon --exec babel-node src/server --watch ./src/server",
     "windowsbuild": "rm -rf dist && set NODE_ENV=development && webpack --progress",
     "windowsstart": "set NODE_ENV=development && babel-node src/server",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -29,6 +29,8 @@
   "dependencies": {
     "eslint": "^5.12.1",
     "express": "^4.16.4",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
     "webpack-cli": "^3.2.1"
   },
   "devDependencies": {
@@ -36,6 +38,7 @@
     "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
     "eslint-loader": "^2.1.1",

@@ -30,7 +30,7 @@ const renderHtml = args => `
     <body>
       i will be back. ${args}
     </body>
-    
+    <div id="app-root"></div>
     <script src="/js/bundle.js"></script>
   </head>
   <body></body>
