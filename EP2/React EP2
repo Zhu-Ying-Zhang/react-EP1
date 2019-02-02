@@ -1,0 +1,140 @@
+2019/1/29
+EP2順序
+前面的整合都還是初步的整合，之後的設定還是會陸續增加
+webpack.config.js之前已經在pcakage.json內設定NODE_ENV參數
+但還是希望可以放進config.json來控制
+有些情況還是會希望NODE_ENV=development npm run build的NODE_ENV的設定是有用的就會在webpack.config.js另外設定
+
+--流程
+如在cmd有設定環境變數則優先使用
+如無 則尋找config.json
+如無 則使用預設的數值(通常會使用prodution)
+
+可以在webpack寫入import
+--注意點
+webpackg使用的語法為es5所以會出錯
+可以將檔案從webpack.config.js更改為webpack.config.babel.js這樣就會看得懂import了(神奇的巫術 可以上網查詢為何)
+套用ES6的語法就可以使用export default{} 等同於 module.exports={}
+
+設定環境變數通常會使用NODE_ENV=development webpack --progress 如果是使用 webpack -p--progress 的-p只存在於webpack執行的時候
+如果不想要只影響webpack也想影響其他地方還是會建議使用NODE_ENV=development
+
+1.整合Express
+專案想變成web server就需要express
+cmd : npm install express --save
+將src內的資料夾分為client server 並將原src內的index.js、index.html移至client因為是屬於用戶端看到的
+在sever folder新增index.js作為正式啟動時在server端的進入點
+在index.js建立server實體 
+第一件事-->server要如何處理行為
+使用get server.get('/', (request, respons)=>{})
+request 負責獲得請求
+respons 為一個API
+第二件事-->讓server跑起來
+                               實際上跑前來執行的程式
+使用listen server.listen(PORT, ()=>{})
+可以在package.json內加入"devserver" : "babel-node src/server/index.js"
+這樣就可以在index.js用上ES6語法
+如果怕不知道有沒有在跑可以在server.listen加上console.log()
+有些人會想去設定port就可以跟webpack.config.babel.js一樣進行設定
+可以使用'`'該符號來做string 這樣才可以用ES6語法 ex : `hi my name is ${name}`
+${name}變為變動的字
+
+Q : 為何要設定server內的檔案名稱為index.js
+A : 如果不去指定檔名的話預先會抓取index.js
+
+--順便教學--
+每次的更新都要存檔重新啟動server => 麻煩
+可以使用nodemon
+會去監控你的資料夾 如有變動會去執行你想要的指令
+cmd : npm install nodemon --save-dev
+可以監控檔案或者資料夾 改完在網頁F5就可以看到效果
+新增檔案跟修改檔案會觸發指令
+
+renderHtml 可以直接放html 如果放字串他會幫你變成html
+在renderHtml中也不需要()=>{return 字串} 可以改寫()=> 字串
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page Title</title>
+    <body>
+      i will be back.
+    </body>
+    <script src="../dist/bundle.js"></script>
+  </head>
+  <body></body>
+</html>
+通常不會用../dist/bundle.js這樣的路徑
+sever還有一種用法是server.use 可以去設定什麼樣的path要對應什麼樣的檔案路徑
+ex: 
+server.use('/js/', `${__dirname}`/../../dist/client/) 告知說要抓js可以到該路徑抓（靜態檔案）
+通常會設定很多例如css、fonts、img等等 可以使用foreach
+提示：動態用get 靜態用use
+__dirname是檔案位於的資料夾
+
+因為目前有client以及server資料夾
+所以將webpack.config.babel.js內的路徑進行更改
+再來重新build
+輸出的filename要用相對路徑
+但是因為會殘留舊檔案所以會在build時先將dist folder刪除
+所以會在build的cmd先把dist進行刪除的動作
+如果是在windows無法使用rm -rf指令可以去尋找 npm rimraf
+cmd : npm install rimraf --save-dev
+使用方法為 rimraf dist
+有改變路徑的話都要檢查其他檔案的路徑有無錯誤不然會無法抓到正確的js檔案
+
+--補充說明
+server還有特殊用法可以傳入參數可以參考./src/server/index.js內的註解
+
+每次的更改都需要重新build一次很麻煩所以就有了hot reload的出現
+
+2. 整合 hot reload
+介紹hot reload：
+server會因為express而重跑但client不會
+透過hot reload在前端有修改時可以馬上變化不需要重新下指令
+是一個webpack的套件 會去監控資料夾 如有改動會重新編譯
+會再透過socket server去跟瀏覽器說去更新
+
+--看到可以記錄的部分
+在vim模式下 可以輸入:Ve 可以看到資料夾的tree
+
+hot reload是webpack的plugin
+兩個plugin組合出來的
+webpack-dev-server 與express不一樣 是使用webpack去跑的
+他只會print compile出來的東西會自動refresh
+但不會去吃express的index.js
+如果想保留express就變成要用 webpack hot middleware以及webpack dev middleware
+webpack dev middleware功用：幫你重新compile改變的檔案
+webpack hot middleware功用：compile出來如果有變化會把改變得部分吐到瀏覽器
+cmd : npm install --save-dev webpack-hot-middleware webpack-dev-middleware
+如果再開發某功能時有參考某寫blog可以將URL貼上以便日後閱讀
+
+new webpack.HotModuleReplcaementPlugin() => hot reload
+new webpack.NoEmitOnErrorPlugin() => compile不要把Error吐出來
+
+為什麼要獨立hotReload.js出來
+因為她需要import很多東西會造成檔案很大 希望在實際上跑時 不要server跑的loading太重 吃太多記憶體跟CPU資源
+所以在prod不想包含開發的package
+1. 不會使用import來加入檔案
+2. 動態加載(dymanic require)Js檔案
+確保真正上線時不會有開發的東西
+
+export與export default差異為何
+import的地方不一樣(export default)
+import HotReload from './HotReload.js
+HotReload.webpackDevMiddleware;
+
+import { webpackDevMiddleware } from './hotReload.js'
+webpackDevMiddleware;
+看習慣來使用
+
+nodemon 可能會影響 webpack hot reload
+目前更改js會重新整理 --> js會reload有可能是因為是程式的進入點 所以才會這樣
+css可以不需要refresh就更改 好處是在做react時會有state如果只是更改樣式不會動到
+
+
+--知識點
+在webpack.config.js內的entry寫mutiple進入點
+ex:
+entry:{
+  bundle:['./src/client/js/index.js', hotmiddleScript],
+}
