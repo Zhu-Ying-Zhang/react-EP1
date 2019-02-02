@@ -1,0 +1,47 @@
+{
+  "name": "react-ep1",
+  "version": "0.0.1",
+  "description": "https://www.youtube.com/watch?v=ALc5W7biMP4&t=875s",
+  "main": "index.js",
+  "scripts": {
+    "unixbuild": "rm -rf dist NODE_ENV=development webpack --progress",
+    "unixstart": "NODE_ENV=development babel-node src/server",
+    "devserver": "nodemon --exec babel-node src/server --inspect src/server",
+    "windowsbuild": "rm -rf dist && set NODE_ENV=development && webpack --progress",
+    "windowsstart": "set NODE_ENV=development && babel-node src/server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zhu-Ying-Zhang/react-EP1.git"
+  },
+  "keywords": [
+    "server-side-rendering",
+    "react",
+    "redux"
+  ],
+  "author": "Ying-Zhang Zhu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zhu-Ying-Zhang/react-EP1/issues"
+  },
+  "homepage": "https://github.com/Zhu-Ying-Zhang/react-EP1#readme",
+  "dependencies": {
+    "eslint": "^5.12.1",
+    "express": "^4.16.4",
+    "webpack-cli": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "css-loader": "^2.1.0",
+    "eslint-plugin-react": "^7.12.4",
+    "nodemon": "^1.18.9",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.0",
+    "webpack-dev-middleware": "^3.5.1",
+    "webpack-hot-middleware": "^2.24.3"
+  }
+}
