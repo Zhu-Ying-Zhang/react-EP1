@@ -1,0 +1,43 @@
+介紹react router
+cmd : npm install --save react-router-dom
+需要存在app的最外面使用這樣其他的component才會知道
+react router作用 : 
+通常一般頁面
+以行銷網頁來說，可能會有非常多的頁面
+有的時候不希望因為切換重新整理導致資料消失
+所以會使用router來做同一個頁面的切換==>顧名思義為只有body不同而已
+ { Link, Switch, Route }
+如果今天不使用router就要有4份的html檔案且在express也要一一設定
+會導致server loading很重
+使用者在前一個頁面已經設定一些值就會跑掉
+
+與link、route搭配
+Link功能 :
+類似a href的功能只是會在同一個頁面而不會reload
+實際可以看App.jsx
+
+根據不同網址顯示不同component需要switch Route
+這時候如果只有單純使用<Route path="/" render={}/>會發現一個問題
+在點擊其他頁面時會同時出現Main以及其他頁面的訊息
+WHY!!?
+ANS: 因為在main條件是有/ 但其他的頁面是/*所以連main都會出現
+如果要避免就要寫exact
+保險起見會在加switch
+作用告訴react router底下的route只有一個會被顯示
+會有優先順序會找第一個
+
+Route裡面除了使用render外也可以使用component
+如果是使用render在切換頁面時都是初始產生的component不會重新產生(同一個component)
+但如果是使用component在切換頁面時會重新render
+所以要視情況使用
+
+在route被render出來的元件底下可以繼續使用router的功能
+這樣就可以一路slash下去
+
+Redirect
+使用方法
+<Redirect from="/about" to="/about/me">\
+遇到設定的網址會幫你跳轉到需要的網址
+
+如果今天想要設定跑到error的話
+可以寫說 <Route render={() => <divERROR</div>}/>
